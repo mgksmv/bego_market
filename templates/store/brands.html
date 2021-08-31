@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load mptt_tags %}
+
+{% block content %}
+
+    <!-- ========================= SECTION PAGETOP ========================= -->
+    <section class="section-pagetop bg">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home"></i> Главная</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Бренды</li>
+                </ol>
+            </nav>
+        </div> <!-- container //  -->
+    </section>
+    <!-- ========================= SECTION INTRO END// ========================= -->
+
+    <!-- ========================= SECTION CONTENT ========================= -->
+    <section class="section-content padding-y">
+        <div class="container">
+
+            <div class="text-center pb-4">
+                <h2 class="title-page">Бренды</h2>
+            </div>
+
+            <div class="row">
+                {% for brand in brands %}
+                    <div class="col-md-3 text-center">
+                        <a href="{{ brand.slug }}"><img class="pb-3" src="{{ brand.logo.url }}" alt="" height="100" width="auto"></a><br>
+                        <a href="{{ brand.slug }}">{{ brand.brand_name }}</a>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div> <!-- container .//  -->
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% endblock %}

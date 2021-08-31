@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <!-- ========================= SECTION CONTENT ========================= -->
+    <section class="section-content">
+
+        <section class="section-pagetop bg">
+            <div class="container">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home"></i> Главная</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Войти</li>
+                    </ol>
+                </nav>
+            </div> <!-- container //  -->
+        </section>
+
+        <!-- ============================ COMPONENT LOGIN   ================================= -->
+        {% if request.GET.command == 'verification' %}
+            <div class="container mx-auto alert alert-info mb-5" style="max-width: 1024px; margin-top:100px;">
+                Чтобы завершить регистрацию, активируйте аккаунт с помощью ссылки, которую мы отправили Вам на
+                E-mail <b>{{ request.GET.email }}</b>
+                <br>
+                Уже активировали? <a href="{% url 'login' %}">Войти</a>
+                <br>
+                Ссылка не пришла? <a href="{% url 'resend_activation_link' request.GET.email %}">Отправить снова</a>
+            </div>
+        {% else %}
+            <div class="card mx-auto" style="max-width: 380px; margin-top:100px;">
+                <div class="card-body">
+                    {% include 'includes/alerts.html' %}
+                    <h4 class="card-title mb-4">Вход</h4>
+                    <form action="{% url 'login' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input type="email" class="form-control" placeholder="Email" name="email">
+                        </div> <!-- form-group// -->
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-10 col-sm-10">
+                                    <input type="password" class="form-control eye-show" placeholder="Пароль"
+                                           name="password">
+                                </div>
+                                <div class="col-md-2 col-sm-2">
+                                    <span id="eye" class="show far fa-eye-slash"></span>
+                                </div>
+                            </div>
+                        </div> <!-- form-group// -->
+
+                        <div class="form-group">
+                            <a href="{% url 'forgot_password' %}" class="float-right">Забыли пароль?</a>
+
+                        </div> <!-- form-group form-check .// -->
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block"> Войти</button>
+                        </div> <!-- form-group// -->
+                    </form>
+                </div> <!-- card-body.// -->
+            </div> <!-- card .// -->
+
+            <p class="text-center mt-4">Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a></p>
+            <br><br>
+        {% endif %}
+        <!-- ============================ COMPONENT LOGIN  END.// ================================= -->
+
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% endblock %}

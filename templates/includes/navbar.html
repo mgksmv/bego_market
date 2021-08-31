@@ -1,0 +1,122 @@
+{% load static %}
+{% load mptt_tags %}
+
+
+<header class="section-header sticky-top">
+    <nav class="navbar navbar-expand-sm navbar-color border-bottom">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTop4"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTop4">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a href="{% url 'about' %}" class="nav-link">О магазине</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="{% url 'payment_and_delivery' %}" class="nav-link">Оплата и доставка</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="{% url 'laboratory' %}" class="nav-link">Лаборатория</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="{% url 'contact' %}" class="nav-link">Контакты</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li><a href="mailto:info@begomarket.ru" class="nav-link"> <i class="fa fa-envelope"></i>
+                        info@begomarket.ru</a></li>
+                    <li><a href="tel:+79887744111" class="nav-link"> <i class="fa fa-phone"></i> +7 (988) 774-41-11</a>
+                    </li>
+                </ul> <!-- list-inline //  -->
+            </div> <!-- navbar-collapse .// -->
+        </div> <!-- container //  -->
+    </nav>
+
+    <section class="header-main border-bottom">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-2 col-md-3 col-6">
+                    <a href="{% url 'home' %}" class="brand-wrap">
+                        <img class="logo" src="{% static '/images/logo.png' %}" alt="BEGO Market">
+                    </a> <!-- brand-wrap.// -->
+                </div>
+                <div class="col-lg col-sm col-md col-6 flex-grow-0">
+                    <div class="category-wrap dropdown d-inline-block float-right">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-bars"></i>  Все категории
+                        </button>
+                        <ul class="dropdown-menu">
+                            {% recursetree links %}
+                                <li class="dropdown-submenu dropright filter-category"><a
+                                        class="dropdown-item {% if not node.is_leaf_node %} dropdown-toggle {% endif %}"
+                                        href="{{ node.get_url }}">{{ node.category_name }}</a>
+                                    {% if not node.is_leaf_node %}
+                                        <ul class="dropdown-menu">
+                                            <li>{{ children }}</li>
+                                        </ul>
+                                    {% endif %}
+                                </li>
+                            {% endrecursetree %}
+                        </ul>
+                    </div>  <!-- category-wrap.// -->
+                </div> <!-- col.// -->
+                <a href="{% url 'products' %}" class="btn btn-outline-primary">Каталог</a>
+                <div class="col-lg  col-md-6 col-sm-12 col">
+                    <form action="{% url 'search' %}" class="search" method="GET">
+                        <div class="input-group w-100">
+                            <input type="text" class="form-control" style="width:60%;" placeholder="Поиск"
+                                   name="keyword">
+
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form> <!-- search-wrap .end// -->
+                </div> <!-- col.// -->
+                <div class="col-lg-3 col-sm-6 col-8 order-2 order-lg-3">
+                    <div class="d-flex justify-content-end mb-3 mb-lg-0">
+                        {#                        {% if user.is_authenticated %}#}
+                        {#                            <div class="widget-header">#}
+                        {#                                <small class="title text-muted">Вы вошли как {{ user.first_name }}</small>#}
+                        {#                                <div>#}
+                        {#                                    <a href="{% url 'dashboard' %}">Профиль</a> <span class="dark-transp"> | </span>#}
+                        {#                                    <a href="{% url 'logout' %}">Выйти</a>#}
+                        {#                                </div>#}
+                        {#                            </div>#}
+                        {#                        {% else %}#}
+                        {% if not request.user.is_authenticated %}
+                            <div class="widget-header">
+                                <small class="title text-muted">Добро пожаловать, гость!</small>
+                                <div>
+                                    <a href="{% url 'login' %}">Войти</a> <span class="dark-transp"> | </span>
+                                    <a href="{% url 'register' %}"> Регистрация</a>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <a href="{% url 'cart' %}" class="widget-header pl-2 ml-2">
+                            <div class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i>
+                            </div>
+                            <span class="badge badge-pill badge-primary notify" id="cart-counter">{{ cart_count }}</span>
+                        </a>
+                        {% if request.user.is_authenticated %}
+                            <a href="{% url 'wishlist' %}" class="widget-header pl-2 ml-2">
+                                <div class="icon icon-sm rounded-circle border"><i class="fas fa-heart"></i>
+                                </div>
+                                <span class="badge badge-pill badge-primary notify" id="wishlist-counter">{{ wishlist_count }}</span>
+                            </a>
+                            <a href="{% url 'dashboard' %}" class="widget-header pl-2 ml-2">
+                                <div class="icon icon-sm rounded-circle border"><i class="fas fa-user"></i>
+                                </div>
+                            </a>
+                        {% endif %}
+                    </div> <!-- widgets-wrap.// -->
+                </div> <!-- col.// -->
+            </div> <!-- row.// -->
+        </div> <!-- container.// -->
+    </section> <!-- header-main .// -->
+
+</header> <!-- section-header.// -->

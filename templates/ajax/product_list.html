@@ -1,0 +1,41 @@
+{% for product in products %}
+    <div class="col-md-4">
+        <figure class="card card-product-grid">
+            <div class="img-wrap">
+                <img src="{{ product.images.url }}">
+
+            </div> <!-- img-wrap.// -->
+            <figcaption class="info-wrap">
+                <div class="fix-height">
+                    <a href="{{ product.get_url }}"
+                       class="title">{{ product.product_name }}</a>
+                    <div class="price-wrap mt-2">
+                        <span class="price">{{ product.brand }}</span>
+                    </div> <!-- brand-wrap.// -->
+                    <div class="price-wrap mt-2">
+                        <span class="price">{{ product.price }} ₽</span>
+                    </div> <!-- price-wrap.// -->
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-8">
+                        <a href="{{ product.get_url }}"
+                           class="btn btn-block btn-primary">Подробнее</a>
+                    </div>
+                    <div class="col-md-4">
+                        {% if product in wishlist %}
+                            <a href="{% url 'add_to_wishlist' product.id %}"
+                               class="btn btn-outline-dark">
+                                <i class="fas fa-heart"></i>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'add_to_wishlist' product.id %}"
+                               class="btn btn-outline-primary">
+                                <i class="fas fa-heart"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </figcaption>
+        </figure>
+    </div> <!-- col.// -->
+{% endfor %}

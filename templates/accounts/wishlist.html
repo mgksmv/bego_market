@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <!-- ========================= SECTION CONTENT ========================= -->
+    <section class="section-content padding-y bg">
+        {% include 'includes/alerts.html' %}
+        <div class="container">
+            <div class="row">
+                {% include 'includes/dashboard_sidebar.html' %}
+                <main class="col-md-9">
+                    <article class="card">
+                        <header class="card-header">
+                            <strong class="d-inline-block mr-3">Список желаемого</strong>
+                        </header>
+                        <div class="card-body">
+                            <div class="row">
+                                {% if products %}
+                                    {% for product in products %}
+                                        <div class="col-md-4">
+                                            <figure class="card card-product-grid">
+                                                <div class="img-wrap">
+                                                    <img src="{{ product.product.images.url }}">
+                                                </div> <!-- img-wrap.// -->
+                                                <figcaption class="info-wrap">
+                                                    <div class="fix-height">
+                                                        <a href="{{ product.product.get_url }}"
+                                                           class="title">{{ product.product.product_name }}</a>
+                                                        <div class="price-wrap mt-2">
+                                                            <span class="price">{{ product.product.brand }}</span>
+                                                        </div> <!-- brand-wrap.// -->
+                                                        <div class="price-wrap mt-2">
+                                                            <span class="price">{{ product.product.price }} ₽</span>
+                                                        </div> <!-- price-wrap.// -->
+                                                    </div>
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-8">
+                                                            <a href="{{ product.product.get_url }}"
+                                                               class="btn btn-block btn-primary">Подробнее</a>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            {% if request.user.is_authenticated %}
+                                                                <button class="btn {% if product.product.id in wishlist_products %}btn-outline-dark{% else %}btn-outline-primary{% endif %} add-to-wishlist"
+                                                                        data-product="{{ product.product.id }}">
+                                                                    <i class="fas fa-heart"></i>
+                                                                </button>
+                                                            {% else %}
+                                                                <button class="btn btn-outline-primary" disabled>
+                                                                    <i class="fas fa-heart"></i>
+                                                                </button>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </figcaption>
+                                            </figure>
+                                        </div> <!-- col.// -->
+                                    {% endfor %}
+                                {% else %}
+                                    <h4 class="text-center">Вы еще не добавили ничего в избранное</h4>
+                                    <br>
+                                    <div class="text-center">
+                                        <a class="btn btn-primary" href="{% url 'products' %}">Перейти к каталогу</a>
+                                    </div>
+                                {% endif %}
+                            </div> <!-- card-body .// -->
+                        </div>
+                    </article> <!-- order-group.// -->
+                </main>
+            </div> <!-- row.// -->
+        </div>
+
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% endblock %}

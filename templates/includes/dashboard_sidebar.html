@@ -1,0 +1,19 @@
+<aside class="col-md-3">
+    <!--   SIDEBAR   -->
+    <ul class="list-group">
+        <a class="list-group-item {% if '/account/' == request.path or '/dashboard/' in request.path %} active {% endif %}"
+           href="{% url 'dashboard' %}">Об аккаунте</a>
+        <a class="list-group-item {% if '/wishlist/' in request.path %} active {% endif %}"
+           href="{% url 'wishlist' %}">Список желаемого</a>
+        <a class="list-group-item {% if '/my-orders/' in request.path %} active {% endif %}"
+           href="{% url 'my_orders' %}">Мои заказы</a>
+        <a class="list-group-item {% if '/edit-profile/' in request.path %} active {% endif %}"
+           href="{% url 'edit_profile' %}">Редактировать профиль</a>
+        <a class="list-group-item {% if '/change-password/' in request.path %} active {% endif %}"
+           href="{% url 'change_password' %}">Изменить пароль</a>
+    </ul>
+    <br>
+    <a class="btn btn-light btn-block" href="{% url 'logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Выйти из аккаунта</span>
+    </a>
+    <!--   SIDEBAR .//END   -->
+</aside>

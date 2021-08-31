@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <!-- ========================= SECTION CONTENT ========================= -->
+    <section class="section-content">
+
+        <section class="section-pagetop bg">
+            <div class="container">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home"></i> Главная</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Регистрация</li>
+                    </ol>
+                </nav>
+            </div> <!-- container //  -->
+        </section>
+
+        <!-- ============================ COMPONENT REGISTER   ================================= -->
+        <div class="card mx-auto" style="max-width:520px; margin-top:40px;">
+            <article class="card-body">
+                {% include 'includes/alerts.html' %}
+                <header class="mb-4"><h4 class="card-title">Регистрация</h4></header>
+                <form action="{% url 'register' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="col form-group">
+                            <label>Имя <span class="text-danger">*</span></label>
+                            {{ form.first_name }}
+                            {{ form.first_name.errors }}
+                        </div> <!-- form-group end.// -->
+                        <div class="col form-group">
+                            <label>Фамилия <span class="text-danger">*</span></label>
+                            {{ form.last_name }}
+                            {{ form.last_name.errors }}
+                        </div> <!-- form-group end.// -->
+                    </div> <!-- form-row end.// -->
+                    <div class="form-row">
+                        <div class="col form-group">
+                            <label>E-mail <span class="text-danger">*</span></label>
+                            <p>{{ form.email }}</p>
+                            {{ form.email.errors }}
+                        </div> <!-- form-group end.// -->
+                        <div class="col form-group">
+                            <label>Номер</label>
+                            {{ form.phone_number }}
+                            {{ form.phone.errors }}
+                        </div> <!-- form-group end.// -->
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Ваш город <span class="text-danger">*</span></label>
+                            {{ form.city }}
+                            {{ form.city.errors }}
+                        </div> <!-- form-group end.// -->
+                    </div> <!-- form-row.// -->
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Пароль <span class="text-danger">*</span></label>
+                            {{ form.password }}
+                        </div> <!-- form-group end.// -->
+                        <div class="form-group col-md-6">
+                            <label>Повторите пароль <span class="text-danger">*</span></label>
+                            {{ form.confirm_password }}
+                        </div> <!-- form-group end.// -->
+                    </div>
+                    {{ form.non_field_errors }}
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block"> Зарегистрироваться</button>
+                    </div> <!-- form-group// -->
+
+                </form>
+            </article><!-- card-body.// -->
+        </div> <!-- card .// -->
+        <p class="text-center mt-4">Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></p>
+        <br><br>
+        <!-- ============================ COMPONENT REGISTER  END.// ================================= -->
+
+
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+
+
+{% endblock %}

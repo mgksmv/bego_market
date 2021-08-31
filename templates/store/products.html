@@ -1,0 +1,313 @@
+{% extends 'base.html' %}
+{% load mptt_tags %}
+{% load url_replace %}
+
+{% block content %}
+    {#    <!-- ========================= SECTION PAGETOP ========================= -->#}
+    {#    <section class="section-pagetop bg">#}
+    {#    <div class="container">#}
+    {#        <h2 class="title-page">Category products</h2>#}
+    {#        <nav>#}
+    {#        <ol class="breadcrumb text-white">#}
+    {#            <li class="breadcrumb-item"><a href="#">Home</a></li>#}
+    {#            <li class="breadcrumb-item"><a href="#">Best category</a></li>#}
+    {#            <li class="breadcrumb-item active" aria-current="page">Great articles</li>#}
+    {#        </ol>  #}
+    {#        </nav>#}
+    {#    </div> <!-- container //  -->#}
+    {#    </section>#}
+    {#    <!-- ========================= SECTION INTRO END// ========================= -->#}
+
+    <!-- ========================= SECTION PAGETOP ========================= -->
+    <section class="section-pagetop bg">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home"></i> Главная</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Каталог</li>
+                </ol>
+            </nav>
+        </div> <!-- container //  -->
+    </section>
+    <!-- ========================= SECTION INTRO END// ========================= -->
+
+    <!-- ========================= SECTION CONTENT ========================= -->
+    <section class="section-content padding-y">
+        <div class="container">
+            <div class="text-center pb-4">
+                {% if 'search' in request.path %}
+                    <h2 class="title-page">Результаты поиска</h2>
+                {% else %}
+                    <h2 class="title-page">Каталог</h2>
+                {% endif %}
+            </div>
+
+            <div class="row">
+                <aside class="col-md-3">
+
+                    <div class="card">
+
+                        {#                        <div class="filter-content collapse show" id="collapse_1" style="display: none;">#}
+                        {#                            <div class="list-group list-group-flush">#}
+                        {#                                <li class="list-group-item">#}
+                        {#                                    <input type="checkbox" class="filter-checkbox" data-filter="category"#}
+                        {#                                           value="{{ category.id }}">  Все категории#}
+                        {#                                </li>#}
+                        {#                                {% recursetree links %}#}
+                        {#                                    <li class="list-group-item">#}
+                        {#                                        {% if node.slug in request.path %}#}
+                        {#                                            <input type="checkbox" class="filter-checkbox" data-filter="category"#}
+                        {#                                                   value="{{ node.id }}" checked>  {{ node.category_name }}#}
+                        {#                                            {% if not node.is_leaf_node %}#}
+                        {#                                                <input type="checkbox" class="filter-checkbox"#}
+                        {#                                                       data-filter="category" value="{{ node.id }}" checked>#}
+                        {#                                                 {{ children }}#}
+                        {#                                            {% endif %}#}
+                        {#                                        {% else %}#}
+                        {#                                            <input type="checkbox" class="filter-checkbox" data-filter="category"#}
+                        {#                                                   value="{{ node.id }}">  {{ node.category_name }}#}
+                        {#                                            {% if not node.is_leaf_node %}#}
+                        {#                                                <input type="checkbox" class="filter-checkbox"#}
+                        {#                                                       data-filter="category" value="{{ node.id }}">#}
+                        {#                                                 {{ children }}#}
+                        {#                                            {% endif %}#}
+                        {#                                        {% endif %}#}
+                        {##}
+                        {#                                    </li>#}
+                        {#                                {% endrecursetree %}#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+
+                        <form action="" method="GET">
+                            <article class="filter-group">
+                                <header class="card-header">
+                                    <a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true"
+                                       class="">
+                                        <i class="icon-control fa fa-chevron-down"></i>
+                                        <h6 class="title">Бренды </h6>
+                                    </a>
+                                </header>
+                                <div class="filter-content collapse show" id="collapse_4" style="">
+                                    <div class="card-body">
+                                        {% for brand in brands %}
+                                            <label class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input filter-checkbox"
+                                                       data-filter="brand" value="{{ brand.id }}" name="brand"
+                                                       {% if brand.id in brand_list_int %}checked{% endif %}>
+                                                <p class="custom-control-label"> {{ brand.brand_name }}</p>
+                                            </label>
+                                        {% endfor %}
+                                    </div> <!-- card-body.// -->
+                                    {#                                    <div class="list-group list-group-flush">#}
+                                    {#                                        {% for brand in brands %}#}
+                                    {#                                            <li class="list-group-item">#}
+                                    {#                                                <input type="checkbox" class="filter-checkbox" data-filter="brand"#}
+                                    {#                                                       value="{{ brand.id }}" name="brand"#}
+                                    {#                                                       {% if brand.id in brand_list_int %}checked{% endif %}>#}
+                                    {#                                                 {{ brand.brand_name }}#}
+                                    {#                                            </li>#}
+                                    {#                                        {% endfor %}#}
+                                    {#                                    </div>#}
+                                </div>
+                            </article> <!-- filter-group .// -->
+
+
+                            <article class="filter-group">
+                                <header class="card-header">
+                                    <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true"
+                                       class="">
+                                        <i class="icon-control fa fa-chevron-down"></i>
+                                        <h6 class="title">Цена</h6>
+                                    </a>
+                                </header>
+                                <div class="filter-content collapse show" id="collapse_3" style="">
+                                    <div class="card-body">
+                                        <input type="range" class="custom-range" id="rangeInput"
+                                               value="{{ min_max_price.price__min }}"
+                                               min="{{ min_max_price.price__min }}"
+                                               max="{{ min_max_price.price__max }}" oninput="maxPrice.value=this.value">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Мин.</label>
+                                                <input class="form-control" id="minPrice"
+                                                       value="{{ min_max_price.price__min }}" type="number"
+                                                       name="minPrice">
+                                            </div>
+                                            <div class="form-group text-right col-md-6">
+                                                <label>Макс.</label>
+                                                <input class="form-control" id="maxPrice"
+                                                       value="{{ min_max_price.price__max }}" type="number"
+                                                       onkeyup="rangeInput.value=this.value"
+                                                       onmouseup="rangeInput.value=this.value" name="maxPrice">
+                                            </div>
+                                        </div> <!-- form-row.// -->
+                                        <button class="btn btn-block btn-primary" id="priceFilterBtn" type="submit">
+                                            Применить
+                                        </button>
+                                        <a href="{% url 'products' %}" class="btn btn-block btn-outline-gray"
+                                           id="priceFilterBtn" type="submit">
+                                            <i class="fas fa-times"></i> Сбросить фильтры
+                                        </a>
+                                    </div><!-- card-body.// -->
+                                </div>
+                            </article> <!-- filter-group .// -->
+                        </form>
+
+                    </div> <!-- card.// -->
+
+                </aside> <!-- col.// -->
+                <main class="col-md-9">
+
+                    {#                    <header class="border-bottom mb-4 pb-3">#}
+                    {#                        <div class="form-inline">#}
+                    {#                            <span class="mr-md-auto">Найдено товаров: <b>{{ product_count }}</b></span>#}
+                    {#                        </div>#}
+                    {#                    </header><!-- sect-heading -->#}
+
+                    <header class="border-bottom mb-4 pb-3">
+                        <div class="form-inline">
+                            <span class="mr-md-auto">Найдено товаров: <b>{{ product_count }}</b></span>
+
+                            <select class="mr-2 form-control" name="sort" id="sort-list"
+                                    onchange="location = sorturl();">
+                                <option id="placeholder" value="" name="orderByName" disabled selected hidden>
+                                    Сортировка
+                                </option>
+                                <option id="all_products" value="all_products">По умолчанию</option>
+                                <option id="product_name" value="product_name">Название от А до Я</option>
+                                <option id="-product_name" value="-product_name">Название от Я до А</option>
+                                <option id="price" value="price">Сначала дешёвые</option>
+                                <option id="-price" value="-price">Сначала дорогие</option>
+                            </select>
+
+                            {#                            <div class="btn-group">#}
+                            {#                                <a href="#" class="btn btn-outline-secondary" data-toggle="tooltip" title="List view">#}
+                            {#                                    <i class="fa fa-bars"></i></a>#}
+                            {#                                <a href="#" class="btn  btn-outline-secondary active" data-toggle="tooltip"#}
+                            {#                                   title="Grid view">#}
+                            {#                                    <i class="fa fa-th"></i></a>#}
+                            {#                            </div>#}
+                        </div>
+                    </header><!-- sect-heading -->
+
+                    <div class="row" id="filteredProducts">
+                        {% if products %}
+                            {% for product in products %}
+                                <div class="col-md-4">
+                                    <figure class="card card-product-grid">
+                                        <div class="img-wrap">
+                                            <img src="{{ product.images.url }}">
+
+                                        </div> <!-- img-wrap.// -->
+                                        <figcaption class="info-wrap">
+                                            <div class="fix-height">
+                                                <div class="product-name">
+                                                    <a href="{{ product.get_url }}"
+                                                       class="title">{{ product.product_name }}</a>
+                                                </div>
+                                                <div class="price-wrap mt-2">
+                                                    <span class="brand">{{ product.brand }}</span>
+                                                </div> <!-- brand-wrap.// -->
+                                                <div class="price-wrap mt-2">
+                                                    <span class="price">{{ product.price }} ₽</span>
+                                                </div> <!-- price-wrap.// -->
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col-md-9">
+                                                    <a href="{{ product.get_url }}"
+                                                       class="btn btn-block btn-primary">Подробнее</a>
+                                                </div>
+
+                                                <div class="col-md-3">
+
+                                                    {% if request.user.is_authenticated %}
+                                                        <button class="btn {% if product.id in wishlist_products %}btn-outline-gray{% else %}btn-outline-primary{% endif %} add-to-wishlist"
+                                                                data-product="{{ product.id }}">
+                                                            <i class="fas fa-heart"></i>
+                                                        </button>
+                                                    {% else %}
+                                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                                                              title="Чтобы добавлять в избранное, Вам необходимо войти или зарегистрироваться">
+                                                            <button class="btn btn-outline-primary"
+                                                                    style="pointer-events: none;" type="button"
+                                                                    disabled>
+                                                                <i class="fas fa-heart"></i>
+                                                            </button>
+                                                        </span>
+                                                    {% endif %}
+
+                                                </div>
+                                            </div>
+                                        </figcaption>
+                                    </figure>
+                                </div> <!-- col.// -->
+                            {% endfor %}
+                        {% else %}
+                            <div class="col-md-12">
+                                <h2>По вашему запросу ничего не найдено</h2>
+                            </div>
+                        {% endif %}
+                    </div> <!-- row end.// -->
+
+                    <nav class="mt-4" aria-label="Page navigation sample">
+                        {% if products.has_other_pages %}
+                            <ul class="pagination">
+                                {% if products.has_previous %}
+                                    <li class="page-item"><a class="page-link"
+                                                             href="?{% url_replace products.previous_page_number %}">Пред.</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled"><a class="page-link" href="#">Пред.</a></li>
+                                {% endif %}
+
+                                {% for i in products.paginator.page_range %}
+                                    {% if products.number == i %}
+                                        <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+                                    {% else %}
+                                        <li class="page-item"><a class="page-link"
+                                                                 href="?{% url_replace i %}">{{ i }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if products.has_next %}
+                                    <li class="page-item"><a class="page-link"
+                                                             href="?{% url_replace products.next_page_number %}">След.</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled"><a class="page-link" href="#">След.</a></li>
+                                {% endif %}
+                            </ul>
+                        {% endif %}
+                    </nav>
+
+                </main> <!-- col.// -->
+
+            </div>
+
+        </div> <!-- container .//  -->
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+
+    <script>
+        function get(name) {
+            if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search))  //location.search give query sling part
+                return decodeURIComponent(name[1]);
+        }
+
+        if (get('ordering'))
+            document.getElementById('placeholder').innerHTML = document.getElementById(get('ordering')).innerHTML;
+
+        function sorturl() {
+            var url = new URL(window.location.href);
+            console.log(url);
+            var search_params = url.searchParams;
+            console.log(search_params);
+            search_params.set('ordering', document.getElementById('sort-list').value);
+            url.search = search_params.toString();
+            var new_url = url.toString();
+            console.log(new_url);
+            return new_url;
+        }
+    </script>
+
+{% endblock %}

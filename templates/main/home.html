@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load mptt_tags %}
+{% block content %}
+
+
+    <!-- ========================= SECTION MAIN ========================= -->
+    <section class="section-intro padding-y-sm">
+        <div class="container">
+
+            {% include 'includes/alerts.html' %}
+
+            {#        <div class="intro-banner-wrap">#}
+            {#            <img src="{% static 'images/banners/banner.png' %}" class="img-fluid rounded">#}
+            {#        </div>#}
+
+            <div class="row">
+                <aside class="col-md-3">
+                    <nav class="card">
+                        <ul class="menu-category">
+                            {% recursetree links %}
+                                <li class="{% if not node.is_leaf_node %} has-submenu {% endif %}"><a
+                                        href="{{ node.get_url }}">{{ node.category_name }}</a>
+                                    {% if not node.is_leaf_node %}
+                                        <ul class="submenu">
+                                            <li>{{ children }}</li>
+                                        </ul>
+                                    {% endif %}
+                                </li>
+                            {% endrecursetree %}
+                        </ul>
+                    </nav>
+                </aside> <!-- col.// -->
+                <div class="col-md-9">
+                    <article class="banner-wrap">
+                        <img src="{% static 'images/banners/banner.png' %}" class="w-100 rounded" alt="">
+                    </article>
+                </div> <!-- col.// -->
+            </div> <!-- row.// -->
+
+        </div> <!-- container //  -->
+    </section>
+    <!-- ========================= SECTION MAIN END// ========================= -->
+
+
+    <!-- ========================= BRAND CAROUSEL  ========================= -->
+    <section class="section-name padding-y-sm pt-5">
+        <div class="container">
+
+            <header class="section-heading">
+                <a href="{% url 'brands' %}" class="btn btn-outline-danger float-right">Посмотреть все</a>
+                <h3 class="section-title">Бренды</h3>
+            </header><!-- sect-heading -->
+
+            <div class="brands">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="brands_slider_container">
+                                <div class="owl-carousel owl-theme brands_slider">
+
+                                    {% for brand in brands %}
+                                        <div class="owl-item">
+                                            <a class="brands_item d-flex flex-column justify-content-center"
+                                               href="{{ brand.get_url }}">
+                                                <img src="{{ brand.logo.url }}" alt="" width="50" height="auto">
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+
+                                </div> <!-- Brands Slider Navigation -->
+                                <div class="brands_nav brands_prev"><i class="fas fa-chevron-left"></i></div>
+                                <div class="brands_nav brands_next"><i class="fas fa-chevron-right"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- container // -->
+    </section>
+    <!-- ========================= BRAND CAROUSEL END//  ========================= -->
+
+    <section class="section-name padding-y-sm my-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    <img src="{% static 'images/icons/delivery-truck.png' %}" width="125" height="125">
+                    <h6 class="pt-4">Быстрая доставка по России</h6>
+                </div> <!-- col.// -->
+                <div class="col-md-3 text-center">
+                    <img src="{% static 'images/icons/guarantee.png' %}" width="125" height="125">
+                    <h6 class="pt-4">Расширенная гарантия</h6>
+                </div> <!-- col.// -->
+                <div class="col-md-3 text-center">
+                    <img src="{% static 'images/icons/box.png' %}" width="125" height="125">
+                    <h6 class="pt-4">Только прямые поставки</h6>
+                </div> <!-- col.// -->
+                <div class="col-md-3 text-center">
+                    <img src="{% static 'images/icons/tag.png' %}" width="125" height="125">
+                    <h6 class="pt-4">Скидки постоянным клиентам</h6>
+                </div> <!-- col.// -->
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================= SECTION  ========================= -->
+    <section class="section-name padding-y-sm">
+        <div class="container">
+
+            <header class="section-heading">
+                <a href="{% url 'products' %}" class="btn btn-outline-danger float-right">Посмотреть все</a>
+                <h3 class="section-title">Последние товары</h3>
+            </header><!-- sect-heading -->
+
+            <div class="row">
+                {% for product in products %}
+                    <div class="col-md-3">
+                        <figure class="card card-product-grid">
+                            <div class="img-wrap">
+                                <img src="{{ product.images.url }}">
+
+                            </div> <!-- img-wrap.// -->
+                            <figcaption class="info-wrap">
+                                <div class="fix-height">
+                                    <div class="product-name">
+                                        <a href="{{ product.get_url }}"
+                                           class="title">{{ product.product_name }}</a>
+                                    </div>
+                                    <div class="price-wrap mt-2">
+                                        <span class="brand">{{ product.brand }}</span>
+                                    </div> <!-- brand-wrap.// -->
+                                    <div class="price-wrap mt-2">
+                                        <span class="price">{{ product.price }} ₽</span>
+                                    </div> <!-- price-wrap.// -->
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-9">
+                                        <a href="{{ product.get_url }}"
+                                           class="btn btn-block btn-primary">Подробнее</a>
+                                    </div>
+
+                                    <div class="col-md-3">
+
+                                        {% if request.user.is_authenticated %}
+                                            <button class="btn {% if product.id in wishlist_products %}btn-outline-gray{% else %}btn-outline-primary{% endif %} add-to-wishlist"
+                                                    data-product="{{ product.id }}">
+                                                <i class="fas fa-heart"></i>
+                                            </button>
+                                        {% else %}
+                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                                                  title="Чтобы добавлять в избранное, Вам необходимо войти или зарегистрироваться">
+                                                            <button class="btn btn-outline-primary"
+                                                                    style="pointer-events: none;" type="button"
+                                                                    disabled>
+                                                                <i class="fas fa-heart"></i>
+                                                            </button>
+                                                        </span>
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+                            </figcaption>
+                        </figure>
+                    </div> <!-- col.// -->
+                {% endfor %}
+            </div> <!-- row.// -->
+
+        </div><!-- container // -->
+    </section>
+
+    <!-- ========================= SECTION  END// ========================= -->
+
+{% endblock %}
